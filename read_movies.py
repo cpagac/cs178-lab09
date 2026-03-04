@@ -11,12 +11,10 @@ from boto3.dynamodb.conditions import Key
 REGION = "us-east-1"
 TABLE_NAME = "Movies"
 
-
 def get_table():
     """Return a reference to the DynamoDB Movies table."""
     dynamodb = boto3.resource("dynamodb", region_name=REGION)
     return dynamodb.Table(TABLE_NAME)
-
 
 def print_movie(movie):
     title = movie.get("Title", "Unknown Title")
@@ -30,14 +28,9 @@ def print_movie(movie):
     print(f"  Genre  : {genre}")
     print()
 
-
 def print_all_movies():
     """Scan the entire Movies table and print each item."""
     table = get_table()
-    
-    # scan() retrieves ALL items in the table.
-    # For large tables you'd use query() instead — but for our small
-    # dataset, scan() is fine.
     response = table.scan()
     items = response.get("Items", [])
     
@@ -48,17 +41,6 @@ def print_all_movies():
     print(f"Found {len(items)} movie(s):\n")
     for movie in items:
         print_movie(movie)
-
-
-def main():
-    print("===== Reading from DynamoDB =====\n")
-    print_all_movies()
-    get_movie_by_title()
-
-
-if __name__ == "__main__":
-    main()
-
 
 def get_movie_by_title():
     """Search for a movie by title using a FilterExpression."""
@@ -77,3 +59,11 @@ def get_movie_by_title():
     print(f"\nFound it!\n")
     for movie in items:
         print_movie(movie)
+
+def main():
+    print("===== Reading from DynamoDB =====\n")
+    print_all_movies()
+    get_movie_by_title()
+
+if __name__ == "__main__":
+    main()
